@@ -14,9 +14,21 @@ Smooth scrolling is enabled by default. Click the extension's toolbar icon to tu
 
 For a source checkout, load the `extension` folder.
 
-## What changes
+## Why scrolling lagged and how the workaround helps
 
-The extension applies `transform: translateZ(0)` only to WhatsApp's message viewport, `#main [data-testid="conversation-panel-messages"]`. This gives the viewport its own composited rendering layer. The original message scroller, wheel/keyboard/touch handling, scrollbar, and message virtualization remain in place. The conversation list and composer receive no rendering override. The rule automatically applies when WhatsApp replaces a message pane.
+The reported lag occurred when scrolling a chat's message history with hardware acceleration enabled. It also occurred with the extension disabled, and disabling the browser's GPU removed it. That points to a rendering or compositing problem in WhatsApp's message viewport. The exact underlying WhatsApp bug has not been established.
+
+The extension applies this CSS only to the message viewport:
+
+```css
+html:not([data-wa-smooth-scroll-disabled]) #main [data-testid="conversation-panel-messages"] {
+  transform: translateZ(0) !important;
+}
+```
+
+`translateZ(0)` encourages the browser to give the viewport its own GPU compositing layer without moving it. Changing how the browser composites this area made scrolling smoother in the tested session while hardware acceleration stayed enabled. Disabling the rule brought the lag back.
+
+The original message scroller, wheel/keyboard/touch handling, scrollbar, and message virtualization remain in place. The conversation list and composer receive no rendering override. The rule automatically applies when WhatsApp replaces a message pane.
 
 The extension does not disable the browser's GPU, remove image blur, alter bubble shadows, or change the chat background. It does not pin conversations or select filters.
 
