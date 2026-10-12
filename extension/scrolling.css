@@ -1,0 +1,4 @@
+/* Promote only the message viewport. Native scrolling and layout stay in place. */
+html:not([data-wa-smooth-scroll-disabled]) #main [data-testid="conversation-panel-messages"] {
+  transform: translateZ(0) !important;
+}

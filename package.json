@@ -1,0 +1,12 @@
+{
+  "name": "whatsapp-smooth-scroll",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Standalone WhatsApp Web message scrolling workaround",
+  "scripts": {
+    "check": "node --check extension/content.js && node --check extension/popup.js",
+    "test": "playwright test",
+    "package": "node scripts/package.cjs"
+  },
+  "devDependencies": {"@playwright/test": "1.64.0"}
+}
