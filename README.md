@@ -2,8 +2,6 @@
 
 A standalone Chrome/Chromium extension that reduces scrolling stutter in WhatsApp Web message history while hardware acceleration stays enabled.
 
-It works independently of WhatsApp Unlimited Pins. You can install either extension or use both together.
-
 ## Install
 
 1. Download and extract `whatsapp-smooth-scroll.zip`.
@@ -14,7 +12,7 @@ It works independently of WhatsApp Unlimited Pins. You can install either extens
 
 Smooth scrolling is enabled by default. Click the extension's toolbar icon to turn it off or on. The preference applies immediately to open WhatsApp tabs and survives browser restarts. After installing an update, reload the extension and WhatsApp.
 
-For a source checkout, load the `extension` folder. T3's embedded browser uses a temporary preview; that preview must be reapplied after refreshing WhatsApp.
+For a source checkout, load the `extension` folder.
 
 ## What changes
 
@@ -42,16 +40,8 @@ npm run package
 
 Browser tests load the actual unpacked extension against a synthetic chat. They cover its default state, popup controls, persistence across tabs and reloads, unchanged viewport geometry and scroll position, draft and text-selection preservation, native wheel scrolling, menu/media interactions, replacement message panes, disposal, and light/dark popup rendering. These tests verify behavior, not GPU performance on every machine.
 
-In a signed-in T3 WhatsApp session with hardware acceleration enabled, the user reported smoother message-history scrolling with the viewport layer enabled. Disabling that same rule brought the lag back. During that comparison, the 95th percentile of sampled animation-frame intervals while scrolling was approximately 18 ms with the layer and 103 ms without it. These are frame-callback measurements from unequal manual scroll runs, not a controlled cross-platform benchmark or direct GPU presentation measurements. They corroborate the user's on/off comparison. Some stalls remained. No messages were sent during testing.
+In a signed-in WhatsApp session with hardware acceleration enabled, the message-history scrolling was smoother with the viewport layer enabled. Disabling that same rule brought the lag back. During that comparison, the 95th percentile of sampled animation-frame intervals while scrolling was approximately 18 ms with the layer and 103 ms without it. These are frame-callback measurements from unequal manual scroll runs, not a controlled cross-platform benchmark or direct GPU presentation measurements. They corroborate the user's on/off comparison. Some stalls remained.
 
 ## Package
 
 `npm run package` creates `dist/whatsapp-smooth-scroll.zip` from the extension files only. Tests, dependencies, diagnostics, and browser data are excluded. Icons can be regenerated with `node scripts/create-icons.cjs` after installing Chromium for Playwright.
-
-To verify coexistence with a local checkout of WhatsApp Unlimited Pins, run:
-
-```sh
-WHATSAPP_PINS_PROJECT=/path/to/whatsapp-extension npm test
-```
-
-That optional check loads both extensions, keeps more than three local pins, preserves native phone pin state, opens a pin without searching or changing the draft, and switches the message rendering override independently. It is skipped when the companion checkout is not supplied.
